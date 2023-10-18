@@ -1,47 +1,49 @@
-fetch('https://swapi.dev/api/planets')
-    .then(response1 => response1.json())
-    .then(json1 => {
-        visionneuse(json1)
-    })
+const mySelect = document.querySelector("select");
+const mySelect2 = document.getElementById("select-vitesse");
 
+const API_URL = "https://swapi.dev/api/films/";
+
+const btnPrev = document.getElementById("prev");
+const btnNext = document.getElementById("next");
+const btnArretJouer = document.getElementById("stop");
+
+let minuterie = null;
+let tPlanets = [];
 let index = 0;
+let deffilementAuto = true;
 
-const avantButton = document.getElementById("avantBtn");
-const apresButton = document.getElementById("apresBtn");
-const arretButton = document.getElementById("arretBtn");
+mySelect.addEventListener("change", getDataFilm);
 
-function visionneuse(json1) {
-    imageElement.src = images[currentIndex];
 
-}
+const getDataFilm = () => {
+    btnArretJouer.innerHTML = "Arrêt";
+    btnArretJouer.value = "Arrêt";
+    let filmValue = mySelect.value;
+    deffilementAuto = true;
+    mySelect2.style.display = "none";
 
-avantButton.addEventListener("click", function retour() {
+    fetch(API_URL + filmValue)
+        .then((data) => data.json())
+        .then((dataFilm) => {
+            console.log(dataFilm)
+            gererPlanets(dataFilm.planets);
+        });
+};
+function gererPlanets(dataPlanet) {
+    tPlanets = [];
+    clearInterval(minuterie);
+    document.querySelector("p").innerHTML = "";
+    document.querySelector("img").src = "";
 
-    index = index - 1;
+    dataPlanet.forEach((planet) => {
+        fetch(planet)
+            .then((data) => data.json())
+            .then((planet) => {
+                tPlanets.push(planet);
+            });
+    });
 
-    if (index === -1) {
-        index = 9;
-    }
-
-});
-
-apresButton.addEventListener("click", function next() {
-
-    index = index + 1;
-
-    if (index === 11) {
-        index = 0;
-    }
-
-});
-
-function startTimer() {
-    timer = setInterval(() => {
-        currentIndex = (currentIndex + 1) % images.length;
-        updateImage();
-    }, 3000); // Change image every 3 seconds (adjust as needed)
-}
-
-function resetTimer() {
-    clearInterval(timer);
-}
+    setTimeout(() => {
+        gererCarrouselImg(tPlanets);
+    }, 5000);
+};

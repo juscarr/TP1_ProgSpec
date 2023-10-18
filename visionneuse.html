@@ -9,10 +9,19 @@
 </head>
 <body>
 <header>
-    <h1>Visionneuse</h1>
+    <h1>Visionneuse des films</h1>
 </header>
 <main>
     <section>
+        <select name="liste">
+            <option value="">Choisissez un film</option>
+            <option value="1">A New Hope</option>
+            <option value="2">The Empire Strikes Back</option>
+            <option value="3">Return of the Jedi</option>
+
+        </select>
+
+
         <ul id="visionneuse">
             <li></li>
             <li></li>
@@ -21,7 +30,27 @@
         <button id="avantBtn">Précédent</button>
         <button id="apresBtn">Suivant</button>
         <button id="arretBtn">Arrêt</button>
+
+        <div class="vitesseDeffilement">
+            <select style="display: none" id="select-vitesse">
+                <option value="lent">Lent</option>
+                <option selected value="moyen">Moyen</option>
+                <option value="rapide">Rapide</option>
+            </select>
+        </div>
+
     </section>
+
+
+    <div class="sectionPlanets">
+
+        <p></p>
+        <img />
+
+    </div>
+
+
+
 
 </main>
 </body>
