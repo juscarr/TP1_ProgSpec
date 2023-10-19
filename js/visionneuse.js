@@ -3,15 +3,21 @@
 const selectFilm = document.getElementById("listeFilms");
 selectFilm.addEventListener("change", assyncPlanete);
 let tPlanetes = [];
-let minuteriePrincipal = null;
+let minuteriePrincipale = null;
+
+let indexPlanete = 0;
 
 function assyncPlanete() {
 
-    if (minuteriePrincipal) {
-        clearInterval(minuteriePrincipal);
+    tPlanetes = [];
+
+    indexPlanete = 0;
+
+    if (minuteriePrincipale) {
+        clearInterval(minuteriePrincipale);
     }
 
-    filmActuel = selectFilm.value;
+    let filmActuel = selectFilm.value;
 
     fetch("https://swapi.dev/api/films/" + filmActuel)
         .then((response) => response.json())
@@ -27,22 +33,49 @@ function assyncPlanete() {
                         tPlanetes.push(planete.name);
                     });
             })
-            minuteriePrincipal = setInterval(afficherPlanete, 5000);
+            minuteriePrincipale = setInterval(afficherPlanete, 1000);
         });
-};
+}
 
 
-
-//Fonction pour afficher les planètes selon je JSON envoyé
+//Fonction pour afficher les planètes selon le JSON envoyé
 
 function afficherPlanete() {
 
+    let nomPlanete = document.querySelector("p");
+    let imagePlanete = document.querySelector("img")
 
-    document.querySelector("p").innerHTML = "";
-    document.querySelector("img").src = "";
+    nomPlanete.innerHTML = "";
+    imagePlanete.src = "";
 
+    console.log(indexPlanete + ": index de la planètes")
+    console.log(tPlanetes[indexPlanete] + ": la planètes OBJ")
 
+    nomPlanete.innerHTML = tPlanetes[indexPlanete];
+    imagePlanete.src = './images/' + tPlanetes[indexPlanete] + '.jpg'
+
+    incrementerIndex(1)
 
 }
 
+//Fonction pour faire rouler les images
+
+function incrementerIndex(sens) {
+
+    if (sens === 1) {
+        indexPlanete++;
+    }
+    if (sens === -1) {
+        indexPlanete--;
+    }
+
+    if (indexPlanete > tPlanetes.length - 1) {
+        indexPlanete = 0;
+    }
+
+    if (indexPlanete < 0) {
+        indexPlanete = tPlanetes.length -1;
+    }
+
+}
 
