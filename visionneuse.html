@@ -6,8 +6,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Visionneuse - TP1</title>
     <script defer src="js/visionneuse.js"></script>
+    <style>
+        html {
+            background-color: black;
+            color: white;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /*.visionneuse {*/
+        /*    display: flex;*/
+        /*    align-items: center;*/
+        /*    gap: 20px;*/
+        /*    color: white;*/
+        /*}*/
+
+        p {
+            background-color: white;
+            font-weight: bold;
+            color: black;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
 </head>
-<body>
+<body class="body">
 <header>
     <h1>Visionneuse des films</h1>
 </header>

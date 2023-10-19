@@ -8,6 +8,10 @@ let minuteriePrincipale = null;
 let indexPlanete = 0;
 let enMouvement = true;
 
+let first = true;
+
+let vitesse = "moyen"
+
 function assyncPlanete() {
 
     tPlanetes = [];
@@ -23,18 +27,16 @@ function assyncPlanete() {
     fetch("https://swapi.dev/api/films/" + filmActuel)
         .then((response) => response.json())
         .then((json) => {
-            console.log(json)
             json["planets"].forEach(function pushDansTableau(linkPlanete) {
-                console.log(linkPlanete + ": Avant le fetch")
                 fetch(linkPlanete)
                     .then((response2) => response2.json())
                     .then((planete) => {
-                        console.log(planete + ": Dans le fetch")
-                        console.log(planete.name + ": Dans le fetch avec name")
                         tPlanetes.push(planete.name);
                     });
             })
-            minuteriePrincipale = setInterval(afficherPlanete, 1000);
+            if (first) {
+                minuteriePrincipale = setInterval(afficherPlanete, 1000);
+            }
         });
 }
 
@@ -42,22 +44,21 @@ function assyncPlanete() {
 //Fonction pour afficher les planètes selon le JSON envoyé
 
 function afficherPlanete(sens) {
-    if (sens !== false) {
-        incrementerIndex(1)
+    if (enMouvement) {
+        console.log(vitesse);
+        if (sens !== false) {
+            incrementerIndex(1)
+        }
+        let nomPlanete = document.querySelector("p");
+        let imagePlanete = document.querySelector("img")
+
+        nomPlanete.innerHTML = "";
+        imagePlanete.src = "";
+
+        nomPlanete.innerHTML = tPlanetes[indexPlanete];
+        imagePlanete.src = './images/' + tPlanetes[indexPlanete] + '.jpg'
+
     }
-    let nomPlanete = document.querySelector("p");
-    let imagePlanete = document.querySelector("img")
-
-    nomPlanete.innerHTML = "";
-    imagePlanete.src = "";
-
-    console.log(indexPlanete + ": index de la planètes")
-    console.log(tPlanetes[indexPlanete] + ": la planètes OBJ")
-
-    nomPlanete.innerHTML = tPlanetes[indexPlanete];
-    imagePlanete.src = './images/' + tPlanetes[indexPlanete] + '.jpg'
-
-
 }
 
 //Fonction pour faire rouler les images
@@ -104,20 +105,34 @@ btnStop.addEventListener("click", () => {
 // Fonction pour arrêter ou démarrer la visionneuse
 
 function gestionVisionneuse() {
-
+    first = false;
     if (btnStop.value === "stop") {
         clearInterval(minuteriePrincipale);
         minuteriePrincipale = "";
         afficherVitesse(true);
 
+        enMouvement = false;
+
         btnStop.innerHTML = "Démarrer";
         btnStop.value = "demarrer"
     } else {
-        minuteriePrincipale = setInterval(afficherPlanete, 1000);
         afficherVitesse(false);
+
+        enMouvement = true;
 
         btnStop.innerHTML = "Stop";
         btnStop.value = "stop"
+
+        clearInterval(minuteriePrincipale);
+
+
+        if (vitesse === "moyen") {
+            minuteriePrincipale = setInterval(afficherPlanete, 1000);
+        } else if (vitesse === "lent") {
+            minuteriePrincipale = setInterval(afficherPlanete, 1500);
+        } else if (vitesse === "rapide") {
+            minuteriePrincipale = setInterval(afficherPlanete, 500);
+        }
     }
 }
 
@@ -127,4 +142,13 @@ const selectVitesse = document.getElementById("select-vitesse")
 
 function afficherVitesse(afficher) {
     selectVitesse.hidden = !afficher;
+}
+
+// Fonction changer la vitesse de la visionneuse
+
+selectVitesse.addEventListener("change", changerVitesse)
+
+function changerVitesse() {
+    vitesse = selectVitesse.value;
+    first = true;
 }
